@@ -19,7 +19,6 @@ package com.xuexiang.xupdate.widget;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -39,7 +38,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuexiang.xupdate.R;
@@ -49,7 +47,6 @@ import com.xuexiang.xupdate.entity.UpdateEntity;
 import com.xuexiang.xupdate.proxy.IUpdateProxy;
 import com.xuexiang.xupdate.service.OnFileDownloadListener;
 import com.xuexiang.xupdate.utils.ColorUtils;
-import com.xuexiang.xupdate.utils.DrawableUtils;
 import com.xuexiang.xupdate.utils.UpdateUtils;
 
 import java.io.File;
@@ -92,23 +89,11 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
      */
     private Button mBtnUpdate;
     /**
-     * 后台更新
-     */
-    private Button mBtnBackgroundUpdate;
-    /**
      * 忽略版本
      */
     private TextView mTvIgnore;
-    /**
-     * 进度条
-     */
+
     private NumberProgressBar mNumberProgressBar;
-    //======底部========//
-    /**
-     * 底部关闭
-     */
-    private LinearLayout mLlClose;
-    private ImageView mIvClose;
 
     //======更新信息========//
     /**
@@ -207,17 +192,10 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
         mTvUpdateInfo = view.findViewById(R.id.tv_update_info);
         //更新按钮
         mBtnUpdate = view.findViewById(R.id.btn_update);
-        //后台更新按钮
-        mBtnBackgroundUpdate = view.findViewById(R.id.btn_background_update);
         //忽略
         mTvIgnore = view.findViewById(R.id.tv_ignore);
         //进度条
         mNumberProgressBar = view.findViewById(R.id.npb_progress);
-
-        //关闭按钮+线 的整个布局
-        mLlClose = view.findViewById(R.id.ll_close);
-        //关闭按钮
-        mIvClose = view.findViewById(R.id.iv_close);
     }
 
     @Override
@@ -265,14 +243,9 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
         mTvUpdateInfo.setText(updateInfo);
         mTvTitle.setText(String.format(getString(R.string.xupdate_lab_ready_update), newVersion));
 
-        //强制更新,不显示关闭按钮
-        if (updateEntity.isForce()) {
-            mLlClose.setVisibility(View.GONE);
-        } else {
-            //不是强制更新时，才生效
-            if (updateEntity.isIgnorable()) {
-                mTvIgnore.setVisibility(View.VISIBLE);
-            }
+        //不是强制更新时，才生效
+        if (updateEntity.isIgnorable()) {
+            mTvIgnore.setVisibility(View.VISIBLE);
         }
     }
 
@@ -297,18 +270,10 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
      */
     private void setDialogTheme(int color, int topResId) {
         mIvTop.setImageResource(topResId);
-        mBtnUpdate.setBackgroundDrawable(DrawableUtils.getDrawable(UpdateUtils.dip2px(4, getActivity()), color));
-        mBtnBackgroundUpdate.setBackgroundDrawable(DrawableUtils.getDrawable(UpdateUtils.dip2px(4, getActivity()), color));
-        mNumberProgressBar.setProgressTextColor(color);
-        mNumberProgressBar.setReachedBarColor(color);
-        //随背景颜色变化
-        mBtnUpdate.setTextColor(ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
     }
 
     private void initListeners() {
         mBtnUpdate.setOnClickListener(this);
-        mBtnBackgroundUpdate.setOnClickListener(this);
-        mIvClose.setOnClickListener(this);
         mTvIgnore.setOnClickListener(this);
     }
 
@@ -324,21 +289,11 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
             } else {
                 installApp();
             }
-        } else if (i == R.id.btn_background_update) {
-            //点击后台更新按钮
-            if (mIUpdateProxy != null) {
-                mIUpdateProxy.backgroundDownload();
-            }
-            dismiss();
-        } else if (i == R.id.iv_close) {
+        } else if (i == R.id.tv_ignore) {
             //点击关闭按钮
             if (mIUpdateProxy != null) {
                 mIUpdateProxy.cancelDownload();
             }
-            dismiss();
-        } else if (i == R.id.tv_ignore) {
-            //点击忽略按钮
-            UpdateUtils.saveIgnoreVersion(getActivity(), mUpdateEntity.getVersionName());
             dismiss();
         }
     }
@@ -385,11 +340,6 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
                 mNumberProgressBar.setVisibility(View.VISIBLE);
                 mNumberProgressBar.setProgress(0);
                 mBtnUpdate.setVisibility(View.GONE);
-                if (mPromptEntity.isSupportBackgroundUpdate()) {
-                    mBtnBackgroundUpdate.setVisibility(View.VISIBLE);
-                } else {
-                    mBtnBackgroundUpdate.setVisibility(View.GONE);
-                }
             }
         }
 
@@ -404,7 +354,6 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
         @Override
         public boolean onCompleted(File file) {
             if (!UpdateDialogFragment.this.isRemoving()) {
-                mBtnBackgroundUpdate.setVisibility(View.GONE);
                 if (mUpdateEntity.isForce()) {
                     showInstallButton(file);
                 } else {
