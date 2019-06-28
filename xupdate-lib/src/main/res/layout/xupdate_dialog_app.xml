@@ -28,6 +28,7 @@
             android:textColor="#333"
             android:gravity="center"
             android:layout_marginTop="-75dp"
+            android:paddingBottom="18dp"
             android:textSize="18sp"
             tools:text="是否升级到1.3.2版本？" />
 
@@ -35,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
-            android:layout_marginTop="14dp"
             android:scrollbars="none">
 
             <LinearLayout
