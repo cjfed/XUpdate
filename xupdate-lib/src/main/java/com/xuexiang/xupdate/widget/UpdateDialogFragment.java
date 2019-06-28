@@ -340,6 +340,7 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
                 mNumberProgressBar.setVisibility(View.VISIBLE);
                 mNumberProgressBar.setProgress(0);
                 mBtnUpdate.setVisibility(View.GONE);
+                mTvIgnore.setVisibility(View.GONE);
             }
         }
 
