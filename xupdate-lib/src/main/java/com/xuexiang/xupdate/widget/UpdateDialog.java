@@ -25,8 +25,10 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuexiang.xupdate.R;
@@ -55,6 +57,7 @@ public class UpdateDialog extends BaseDialog implements View.OnClickListener {
      * 顶部图片
      */
     private ImageView mIvTop;
+    private LinearLayout mLlTop;
     /**
      * 标题
      */
@@ -119,6 +122,7 @@ public class UpdateDialog extends BaseDialog implements View.OnClickListener {
     protected void initViews() {
         //顶部图片
         mIvTop = findViewById(R.id.iv_top);
+        mLlTop = findViewById(R.id.ll_top);
         //标题
         mTvTitle = findViewById(R.id.tv_title);
         //提示内容
@@ -135,6 +139,12 @@ public class UpdateDialog extends BaseDialog implements View.OnClickListener {
     protected void initListeners() {
         mBtnUpdate.setOnClickListener(this);
         mTvIgnore.setOnClickListener(this);
+
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        int width = wm.getDefaultDisplay().getWidth();
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlTop.getLayoutParams();
+        layoutParams.width = width /5*4;
+        mLlTop.setLayoutParams(layoutParams);
 
         setCancelable(false);
         setCanceledOnTouchOutside(false);

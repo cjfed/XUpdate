@@ -11,31 +11,37 @@
         android:id="@+id/ll_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="55dp"
-        android:layout_marginRight="55dp"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/iv_top"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/xupdate_bg_app_top" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#333"
-            android:gravity="center"
-            android:layout_marginTop="-75dp"
-            android:paddingBottom="18dp"
-            android:textSize="18sp"
-            tools:text="是否升级到1.3.2版本？" />
+            <com.xuexiang.xupdate.widget.RatioImageView
+                android:id="@+id/iv_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                app:ratio="1.45"
+                android:src="@drawable/xupdate_bg_app_top" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_top"
+                android:layout_marginTop="-52dp"
+                android:textColor="#333"
+                android:gravity="center"
+                android:textSize="18sp"
+                tools:text="是否升级到1.3.2版本？" />
+        </RelativeLayout>
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
+            android:layout_marginTop="-10dp"
             android:scrollbars="none">
 
             <LinearLayout
@@ -48,7 +54,6 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:gravity="center">
 
                     <TextView
@@ -57,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="5dp"
                         android:textColor="#333"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         tools:text="1、更新\n" />
                 </RelativeLayout>
 
@@ -73,6 +78,7 @@
                         app:progress_text_size="18sp"
                         android:layout_margin="10dp"
                         app:progress_text_offset="2dp"
+                        app:progress_reached_color="#08c299"
                         android:layout_centerVertical="true"
                         app:progress_unreached_bar_height="4dp"
                         app:progress_reached_bar_height="4dp"

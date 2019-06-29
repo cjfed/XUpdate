@@ -17,6 +17,7 @@
 package com.xuexiang.xupdate.widget;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -28,16 +29,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuexiang.xupdate.R;
@@ -75,6 +74,7 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
      * 顶部图片
      */
     private ImageView mIvTop;
+    private LinearLayout mLlTop;
     /**
      * 标题
      */
@@ -160,15 +160,6 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
                 return keyCode == KeyEvent.KEYCODE_BACK && mUpdateEntity != null && mUpdateEntity.isForce();
             }
         });
-
-        Window window = getDialog().getWindow();
-        if (window != null) {
-            window.setGravity(Gravity.CENTER);
-            WindowManager.LayoutParams lp = window.getAttributes();
-            DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-            lp.height = (int) (displayMetrics.heightPixels * 0.8f);
-            window.setAttributes(lp);
-        }
     }
 
     @Nullable
@@ -186,6 +177,7 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
     private void initView(View view) {
         //顶部图片
         mIvTop = view.findViewById(R.id.iv_top);
+        mLlTop = view.findViewById(R.id.ll_top);
         //标题
         mTvTitle = view.findViewById(R.id.tv_title);
         //提示内容
@@ -275,6 +267,12 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
     private void initListeners() {
         mBtnUpdate.setOnClickListener(this);
         mTvIgnore.setOnClickListener(this);
+
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        int width = wm.getDefaultDisplay().getWidth();
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mLlTop.getLayoutParams();
+        layoutParams.width = width /5*4;
+        mLlTop.setLayoutParams(layoutParams);
     }
 
     @Override
